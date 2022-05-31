@@ -1,7 +1,61 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Html
+
+@{
 	Layout = null;
 	ViewData["Title"] = "Home Page";
+
+
+	//1. Dichiarare una variabile valorizzandola con il nostro nome.
+	//Dichiarare un'altra variabile valorizzandola con il nostro cognome.
+	//Stampare il nostro nome e cognome all'interno di un tag h2.
+	string nome = "Matteo";
+	string cognome = "imbimbo";
+
+
+	//3. Contare quante volte la lettera a  presente nalla frase "nel mezzo del cammin di nostra vita" e stampare questo valore in pagina
+	Func<dynamic, IHtmlContent> ContaAInFrase(string frase)
+	{
+		int count = 0;
+		frase.Split(' ');
+		foreach (char c in frase)
+		{
+			if (c == 'a')
+			{
+				count++;
+			}
+		}
+		return @<span>@count</span>
+	;
+	}
+
+	//4. Creare una List<int> di 20 numeri interi (generati random da 1 a 90, 1 e 90 inclusi) e mostrare in pagina solo i numeri compresi tra 20 e 70
+	List<int> ListaNumeri()
+	{
+		List<int> lNum = new List<int>();
+		Random rand = new Random();
+		for (var i = 0; i <= 90; i++)
+		{
+			int num = rand.Next(0, 90);
+			lNum.Add(num);
+		}
+		List<int> lNumMaggiori = new List<int>();
+		foreach (int n in lNum)
+		{
+			if (n >= 20 && n <= 70)
+			{
+				lNumMaggiori.Add(n);
+			}
+		}
+		return lNumMaggiori;
+
+	}
+
+	//5. Stampare in pagina la data e l'ora attuale (usando la classe DateTime) con il formato anno-mese-giorno ore:minuti:secondi
+	
+
 }
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +90,20 @@
 	<div class="container">
 		<main role="main" class="pb-3">
 			<div class="text-center">
-				<h1 class="display-4 pb-5">Le pizze piu famose</h1>
+				<h1 class="display-4 pb-5">Le pizze piu famose di @nome @cognome</h1>
+				<span>La somma dei numeri fino a 10 è : @Model</span>
+				<div>La frase contiene @ContaAInFrase("nel mezzo del cammin di nostra vita mi ritrovai per una valle oscura")(null) "a"</div>
+				<div>La lista dei numeri compresi tra 20 e 70 è : 
+				@{
+					foreach (var item in ListaNumeri())
+					{
+						<span>@item</span>
+					}
+				}
+				</div>
+				<div>
+					@DateTime.Now.ToShortDateString() @DateTime.Now.ToShortTimeString()
+				</div>
 				<table class="table">
 					<thead>
 						<tr>
@@ -49,7 +116,7 @@
 					<tbody>
 						<tr>
 							<td><h4>Margherita</h4></td>
-							<td >Ingredienti: Mozzarella, pomodoro, basilico</td>
+							<td>Ingredienti: Mozzarella, pomodoro, basilico</td>
 							<td>8,99$</td>
 							<td><img class="img-fluid" src="~/img/margherita.jpg"></img></td>
 						</tr>
@@ -66,7 +133,7 @@
 							<td><img class="img-fluid" src="~/img/funghi.jpg"></img></td>
 						</tr>
 						<tr>
-							<td ><h4>Boscaiola</h4></td>
+							<td><h4>Boscaiola</h4></td>
 							<td>Ingredienti: Mozzarella, pomodoro, salsiccia, funghi</td>
 							<td>11,99$</td>
 							<td><img class="img-fluid" src="~/img/boscaiola.jpg"></img></td>
